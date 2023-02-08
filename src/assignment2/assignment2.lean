@@ -1,5 +1,10 @@
 import analysis.inner_product_space.pi_L2
 
+/- Good work Priya!
+90/90 Correctness
+10/10 Style
+-/
+
 /-
 This assignment is due midnight on Wednesday, February 1.
 
