@@ -31,7 +31,6 @@ theorem mul_pos_strict_mono (c : ℝ) (hf : strict_mono f) (hc : 0 < c) :
   strict_mono (λ x, c * f x) :=
 begin
   intros a b aleb,
-  simp,
   rw mul_lt_mul_left,
   apply hf,
   apply aleb,
@@ -199,7 +198,7 @@ theorem increasing_gf : ∀ a, a ≤ g (f a) :=
 begin
   intro a,
   apply adj1,
-  simp,
+  refl,
 end
 end
 
@@ -210,7 +209,7 @@ theorem decreasing_fg : ∀ b, f (g b) ≤ b :=
 begin
   intro b,
   apply adj2,
-  simp,
+  refl,
 end
 end
 
