@@ -1,0 +1,28 @@
+\documentclass[11pt]{letter}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{hyperref, url}
+\usepackage[margin=1.5in]{geometry}
+\begin{document}
+\textbf{Math 161 - Midterm Topic} \\
+\textbf{Due Friday, 24 March at 11.59 PM}
+
+\textbf{Priya Malhotra}
+
+I would like to prove Rolle's theorem. Rolle's theorem states that any real-valued differentiable function that attains equal values at two distinct points must has at least one stationary point somewhere between them, so the point where the first derivative is 0. 
+
+More formally put, for a real-valued function $f$, which is continuous on a proper closed interval $[a,b]$, and differentiable on the open interval $(a,b)$ where $f(a) = f(b)$, then $\exists c \in (a,b)$ such that $f'(c) = 0$. 
+
+The generalization of Rolle's theorem: For some real-valued continuous $f$ on a closed interval $[a,b]$, with $f(a) = f(b)$, if for every $x$ in the open interval $(a,b)$, the right hand limit $f'(x^+) := \lim_{h \rightarrow 0^+} \frac{f(x+h) - f(x)}{h}$ and the left hand limit $f'(x^-) := \lim_{h \rightarrow 0^-} \frac{f(x+h) - f(x)}{h}$ exist in the extended real line $[-\infty, \infty]$, then $\exists c \in (a,b)$ such that one of the two limits $f'(c^+)$ and $f'(c^-)$ is greater than 0 and the other is less than 0. If the right and left hand limits agree for every $x$, then they agree in particular for $c$, so the derivative of $f$ exists at $c$ and is equal to 0. 
+
+The proof idea is that if $f(a) = f(b)$, then $f$ either reaches a maximum or minimum somewhere between $a$ and $b$, and at this point, the function changes from increasing to decreasing, or vice versa, and at this point, the derivative is 0. I will split my lean project into roughly these parts when solving it, and will incorporate information on derivatives, and general calculus rules. 
+
+
+
+References:
+https://en.wikipedia.org/wiki/Rolle\%27s\_theorem
+
+
+
+
+\end{document}
