@@ -3,6 +3,16 @@ import data.set.intervals.basic
 import topology.continuous_on
 import analysis.inner_product_space.pi_L2
 
+
+/- Great work Priya!
+100/100
+One small comment: It is nice if you can break a long proof
+into smaller pieces, since that can help Lean compile much
+more quickly.  With a long proof, Lean will start over 
+compiling from scratch whenever a small change is made,
+which can be slow.
+-/
+
 namespace rolle
 
 example {a b c : ℝ} (h1 : b < 0) (h : a / b ≤ 0) : a ≥ 0 * b :=
