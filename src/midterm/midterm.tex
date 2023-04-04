@@ -1,26 +1,151 @@
-\documentclass[11pt]{letter}
+\documentclass[12pt]{article}
 \usepackage{amsmath}
-\usepackage{amssymb}
+\usepackage{amssymb, comment}
 \usepackage{hyperref, url}
-\usepackage[margin=1.5in]{geometry}
+\usepackage{setspace, enumitem} \setstretch{1.5} 
+\usepackage[margin=1.25in]{geometry}
+
 \begin{document}
 \textbf{Math 161 - Midterm Topic} \\
-\textbf{Due Friday, 24 March at 11.59 PM}
+\textbf{Due Friday, 31 March at 11.59 PM}
+
+\begin{comment}
+Notes on Midterm Project Write-up:
+    - The write-up should include a description of the mathematical 
+    statements you implement, and where they fit into mathematics in 
+    general.  You should also include a paper proof of the result you 
+    implemented.  Then, you should comment on which parts of the 
+    implementation were hard and/or easy, how you interacted with 
+    the mathematics library (mathlib), and whether you could imagine 
+    different proofs and how those different proofs might be implemented 
+    (or be hard to implement).  
+    - In general, the write up should be something that a peer in the 
+    class could read and understand, and it should give the peer a good 
+    sense of how they might implement something similar in Lean.
+    - Also, the write-up should be 2-4 pages in length and should be 
+    included as a pdf in your git repository folder where you are keeping 
+    files for your midterm project.
+\end{comment}
 
 \textbf{Priya Malhotra}
 
-I would like to prove Rolle's theorem. Rolle's theorem states that any real-valued differentiable function that attains equal values at two distinct points must has at least one stationary point somewhere between them, so the point where the first derivative is 0. 
+For my midterm I chose to prove Rolle's theorem in Lean. This pdf is the write up component of the midterm, which will include a description of the mathematical statements implemented, where they fit into math in general, a paper proof of Rolle's theorem, as well as commentary on the Lean aspect of this project, how difficult/easy it was to implement, how I used mathlib, and alternate proof possibilities. 
 
-More formally put, for a real-valued function $f$, which is continuous on a proper closed interval $[a,b]$, and differentiable on the open interval $(a,b)$ where $f(a) = f(b)$, then $\exists c \in (a,b)$ such that $f'(c) = 0$. 
+Rolle's theorem states that any real-valued differentiable function that attains equal values at two distinct points must has at least one stationary point somewhere between them, so the point where the first derivative is 0. More formally put, for a real-valued function $f$, which is continuous on a proper closed interval $[a,b]$, and differentiable on the open interval $(a,b)$ where $f(a) = f(b)$, then $\exists c \in (a,b)$ such that $f'(c) = 0$. 
 
 The generalization of Rolle's theorem: For some real-valued continuous $f$ on a closed interval $[a,b]$, with $f(a) = f(b)$, if for every $x$ in the open interval $(a,b)$, the right hand limit $f'(x^+) := \lim_{h \rightarrow 0^+} \frac{f(x+h) - f(x)}{h}$ and the left hand limit $f'(x^-) := \lim_{h \rightarrow 0^-} \frac{f(x+h) - f(x)}{h}$ exist in the extended real line $[-\infty, \infty]$, then $\exists c \in (a,b)$ such that one of the two limits $f'(c^+)$ and $f'(c^-)$ is greater than 0 and the other is less than 0. If the right and left hand limits agree for every $x$, then they agree in particular for $c$, so the derivative of $f$ exists at $c$ and is equal to 0. 
 
-The proof idea is that if $f(a) = f(b)$, then $f$ either reaches a maximum or minimum somewhere between $a$ and $b$, and at this point, the function changes from increasing to decreasing, or vice versa, and at this point, the derivative is 0. I will split my lean project into roughly these parts when solving it, and will incorporate information on derivatives, and general calculus rules. 
+The proof idea is that if $f(a) = f(b)$, then $f$ either reaches a maximum or minimum somewhere between $a$ and $b$, and at this point, the function changes from increasing to decreasing, or vice versa, and at this point, the derivative is 0 (if it exists). %I will split my lean project into roughly these parts when solving it, and will incorporate information on derivatives, and general calculus rules. 
+
+\section{Paper Proof with all definitions}
+
+\subsection{Definition of the Limit of a Function $f$}
+
+Let $I$ be an open interval containing $c$, and let $f$ be a function defined on $I$, except possibly at $c$. The limit of $f(x)$, as $x$ approaches $c$, is $L$, denoted by $$\lim_{x \rightarrow c} f(x) = L$$ means that given any $\epsilon > 0$, there exists $\delta > 0$ such that for all $x \neq c$, if $|x - c| < \delta$, then $|f(x) - L | < \epsilon$. 
+
+Formally: $$\lim_{x \rightarrow c} f(x) = L \Longleftrightarrow \forall \epsilon > 0, \exists \delta > 0 \, s.t. \, 0 < |x - c | < \delta \rightarrow |f(x) - L| < \epsilon$$
+
+\subsection{Definition of One Sided Limits}
+
+\subsubsection{Left-Hand Limit}
+Let $I$ be an open interval containing $c$, and let $f$ be a function defined on $I$, except possibly at $c$. The limit of $f(x)$ as $x$ approaches $c$ from the left, is $L$< or the left-hand limit of $f$ at $c$ is $L$, denoted by $$\lim_{x \rightarrow c^-}f(x) = L$$ means that given any $\epsilon > 0$, there exists $\delta > 0$ such that for all $x < c$, if $|x-c| < \delta$, then $|f(x) - L| < \epsilon$. 
+
+Formally: $$\lim_{x \rightarrow c^-}f(x) = L \Longleftrightarrow \forall \epsilon > 0, \exists \delta > 0 \, s.t. \, \forall x < c, \, (|x-c| < \delta) \rightarrow (|f(x)-L| < \epsilon)$$
+
+\subsubsection{Right-Hand Limit}
+Let $I$ be an open interval containing $c$, and let $f$ be a function defined on $I$, except possibly at $c$. The limit of $f(x)$ as $x$ approaches $c$ from the right is $L$, or the right-hand limit of $f$ at $c$ is $L$, denoted by $$\lim_{x \rightarrow c^+} f(x) = L$$, means that given any $\epsilon > 0$, there exists $\delta > 0$ such that for all $x > c$, if $|x - c| < \delta$, then $|f(x) - L| < \epsilon$. 
+
+Formally: $$\lim_{x \rightarrow c^+}f(x) = L \Longleftrightarrow \forall \epsilon > 0, \exists \delta > 0 \, s.t. \, \forall x > c, \, (|x-c| < \delta) \rightarrow (|f(x)-L| < \epsilon)$$
+
+\subsection{Definition of Continuous Function}
+
+Let $f$ be a function defined on an open interval $I$ containing $c$. 
+
+$f$ is continuous \textbf{at $c$} if $\lim_{x \rightarrow c} f(x) = f(c)$. A way to prove a function $f$ is continuous at $c$ is to verify the following three things:
+
+\begin{itemize}[noitemsep, nolistsep]
+    \item $\lim_{x\rightarrow c} f(x)$ exists
+    \item $f(c)$ is defined
+    \item $\lim_{x \rightarrow c} f(x) = f(c)$
+\end{itemize}
+
+$f$ is continuous \textbf{on $I$} if $f$ is continuous at $c$ for all values of $c$ in $I$. If $f$ is continuous on $(-\infty, \infty)$, we say $f$ is continuous everywhere. 
+
+\subsection{Definition of Continuity on Closed Intervals}
+
+Let $f$ be defined on the closed interval $[a,b]$ for some real numbers $a,b$. $f$ is continuous on $[a,b]$ if the following three properties are satisfied:
+\begin{itemize}[noitemsep, nolistsep]
+    \item $f$ is continuous $(a,b)$
+    \item $\lim_{x \rightarrow a^+} f(x) = f(a)$
+    \item $\lim_{x \rightarrow b^-} f(x) = f(b)$
+\end{itemize}
+
+\subsection{Definition of a Function being Differentiable}
+
+A function $f$ is said to be differentiable at $a$ if the following limit exists: $\lim_{h \rightarrow 0} \frac{f(a + h) - f(a)}{h}$. If this limit exists, then this is called the derivative of $f$ at $a$, denoted $f'(a)$. $$f'(a) = \lim_{h \rightarrow 0} \frac{f(a + h) - f(a)}{h}$$ 
+At a more fundamental level, the definition of a derivative using $\epsilon$ and $\delta$ at point $a$ would be: $$\forall \epsilon > 0, \,\exists \delta > 0, \, \forall x: \; 0 < |h| < \delta \rightarrow \left | \frac{f(a +h) - f(a)}{h} -L \right | < \epsilon$$ where $f'(a) = L$. 
+
+\subsection{Definition of Minima and Maxima}
+
+Let $f$ be defined on an interval $I$ containing $c$. 
+
+\subsubsection{Minimum or Absolute Minimum}
+$f(c)$ is the minimum (also, absolute minimum) of $f$ on $I$ if $f(c) \leq f(x)$ for all $x \in I$.
 
 
+\subsubsection{Maximum or Absolute Maximum}
+$f(c)$ is the maximum (also, absolute maximum) of $f$ on $I$ if $f(c) \geq f(x)$ for all $x \in I$.
 
+The maximum and minimum values are the extreme values, or extrema of $f$ on $I$. 
+
+\subsection{The Extreme Value Theorem}
+
+Let $f$ be a continuous function defined on a closed interval $I$. Then $f$ has both a maximum and minimum value on $I$. 
+
+\subsection{Relative Extrema}
+
+Let $f$ be defined on an interval $I$ containing $c$. 
+
+\subsubsection{Relative Minimum}
+If there is an open interval containing $c$ such that $f(c)$ is the minimum value, then $f(c)$ is a relative minimum of $f$. We also say that $f$ has a relative minimum at $(c, f(c))$.
+
+
+\subsubsection{Relative Maximum}
+If there is an open interval containing $c$ such that $f(c)$ is the maximum value, then $f(c)$ is a relative maximum of $f$. We also say that $f$ has a relative maximum at $(c, f(c))$.
+
+The relative maximum and minimum values make up the relative extrema of $f$.
+
+\subsection{Definition of Critical Numbers and Critical Points}
+
+Let $f$ be defined at $c$. The value $c$ is a critical number, or critical value, of $f$ if $f'(c) = 0$ or if $f'(c)$ is not defined. If $c$ is a critical number of $f$, then the point $(c,f(c))$ is a critical point of $f$. 
+
+Let a function $f$ have a relative extrema at the point $(c,f(c))$. Then $c$ is a critical number of $f$. 
+
+
+ \subsection{Rolle's Theorem}
+
+ Let $f$ be continuous on $[a,b]$ and differentiable on $(a,b)$ where $f(a) = f(b)$. There is some $c$ in $(a,b)$ such that $f'(c) = 0$. 
+
+ \subsection{Proof of Rolle's Theorem}
+
+ Let $f$ be differentiable on $(a,b)$ where $f(a) = f(b)$. There are two cases we consider:
+
+\begin{enumerate}[noitemsep, nolistsep]
+    \item Consider the case when $f$ is constant on $[a,b]$, so $f(x) = f(a) = f(b) \; \forall x \in [a,b]$. Then $f'(x) = 0 \; \forall x \in [a,b]$, showing that there is at least one value $c$ in $(a,b)$ where $f'(c)= 0$. 
+    \item Consider the case where $f$ is not constant on $[a,b]$. The extreme value theorem guarantees that $f$ has a maximal and minimal value on $[a,b]$, found either at the endpoints or at a critical value in $(a,b)$. Since $f(a) = f(b)$ and $f$ is not constant, the maximum and minimum cannot both be found at the endpoints. Assume WLOG that the maximum of $f$ is not found at the endpoints. Therefore, there is a $c \in (a,b)$ such that $f(c)$ is the maximum value of $f$. By the definition of critical numbers, $c$ must be a critical number of $f$. Since $f$ is differentiable, we have that $f'(c)=  0$, completing the proof of the theorem.
+\end{enumerate}
+
+\section{Lean Implementation}
+
+In my Lean project, I have implemented Rolle's theorem by hand, along with $\epsilon$-$\delta$ definitions of limits and derivatives. The formal proof of Rolle's theorem also depends on the Extreme Value theorem, as well as Fermat's theorem on stationary points.
+
+The Lean proof of Rolle's theorem alone ended up rather involved, and since Fermat's theorem and the Extreme Value theorem are not the primary focus of this midterm project, I have not implemented them from first principles in such detail as I have Rolle's theorem. However, I have still integrated my work with \texttt{mathlib} by writing glue code connecting the \texttt{mathlib} proof of the Extreme Value theorem for compact sets with my implementation of Rolle's, so that part is completely sound. I have left Fermat's theorem as open since it is immediately obvious to anyone with analysis experience that an extremum has derivative 0, and the formalized proof of it requires many cases for the various left- and right-hand limits involved, with little relevance to the current project.
+
+\newpage
 References:
-https://en.wikipedia.org/wiki/Rolle\%27s\_theorem
+\begin{enumerate}[noitemsep, nolistsep]
+\item \url{https://en.wikipedia.org/wiki/Rolle\%27s\_theorem}
+\end{enumerate}
 
 
 
