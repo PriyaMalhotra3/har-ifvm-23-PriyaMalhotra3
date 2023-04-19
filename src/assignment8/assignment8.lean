@@ -2,6 +2,14 @@ import data.real.basic
 import data.matrix.basic
 
 /-
+Correctness 90/90
+Style: 10/10
+Good work Priya!
+-/
+
+
+
+/-
 EXERCISE 1.
 
 In set theory, one typically builds up a foundation for reasoning about finite
